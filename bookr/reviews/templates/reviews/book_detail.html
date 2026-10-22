@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Phần chi tiết sách -->
+    <h2 style="margin-left: 30px;margin-top: 20px;">Book Details</h2>
+    <hr>
+    <div style="margin-left: 30px;margin-top: 20px;">
+        <span class="text-info">Title:</span> <span>{{ book.title }}</span><br>
+        <span class="text-info">Publisher:</span> <span>{{ book.publisher }}</span><br>
+        <span class="text-info">Publication Date:</span> <span>{{ book.publication_date }}</span><br>
+        <span class="text-info">Overall Rating:</span>
+        <span class="badge badge-primary badge-pill">{{ book_rating }}</span>
+    </div>
+
+    <!-- Phần bình luận/đánh giá -->
+    <hr>
+    <h2 style="margin-left: 30px" >Review Comments</h2>
+    <ul style="margin-left: 60px;margin-top: 10px;" class="list-group list-group-flush">
+        {% for review in reviews %}
+            <li class="list-group-item">
+                <span class="text-info">Review comment:</span> <span>{{ review.content }}</span><br>
+                <span class="text-info">Created on:</span> <span>{{ review.date_created }}</span><br>
+                <span class="text-info">Modified on:</span> <span>{{ review.date_edited }}</span><br>
+                <span class="text-info">Rating:</span>
+                <!-- Dùng badge-secondary để có màu xám đậm giống trong ảnh -->
+                <span class="badge badge-secondary badge-pill">{{ review.rating|floatformat:0 }}</span><br>
+                <span class="text-info">Creator:</span> <span>{{ review.creator.email }}</span>
+                <a href="{% url 'review_edit' book.pk review.pk %}">Edit Review</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Chưa có đánh giá nào cho cuốn sách này.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'review_create' book.pk %}" class="btn btn-primary">Add Review</a>
+{% endblock %}
